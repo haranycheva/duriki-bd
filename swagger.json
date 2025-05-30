@@ -1,0 +1,631 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bank chotatam",
+    "version": "1.0.0",
+    "description": "api for comand proj"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Авторизація та реєстрація користувачів"
+    },
+    {
+      "name": "Reviews",
+      "description": "Відгуки"
+    },
+    {
+      "name": "Releases",
+      "description": "Релізи"
+    },
+    {
+      "name": "Cases",
+      "description": "Кейси"
+    },
+    {
+      "name": "FAQ",
+      "description": "Часті запитання та відповіді"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Реєстрація користувача",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Користувач створений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некоректний запит"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Логін користувача",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSigninRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успішний логін",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некоректний запит"
+          },
+          "401": {
+            "description": "Невірний email або пароль"
+          }
+        }
+      }
+    },
+    "/auth/getInfo": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Отримати інформацію про користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Інформація про користувача",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Отримати всі відгуки",
+        "responses": {
+          "200": {
+            "description": "Список відгуків",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Review"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/releases": {
+      "get": {
+        "tags": ["Releases"],
+        "summary": "Отримати всі релізи",
+        "responses": {
+          "200": {
+            "description": "Список релізів",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/releases/{id}": {
+      "get": {
+        "tags": ["Releases"],
+        "summary": "Отримати реліз за ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Ідентифікатор релізу"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Деталі релізу",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Release"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Реліз не знайдено"
+          }
+        }
+      }
+    },
+    "/cases": {
+      "get": {
+        "tags": ["Cases"],
+        "summary": "Отримати всі кейси",
+        "responses": {
+          "200": {
+            "description": "Список кейсів",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cases": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Case"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "title": "For Individuals",
+                      "description": "For individuals, our mortgage services pave the way to homeownership, and our flexible personal loans provide vital support during various life milestones. We also prioritize retirement planning, ensuring a financially secure future for our customers.",
+                      "qualities": [
+                        {
+                          "percent": 78,
+                          "name": "Secure Retirement Planning"
+                        },
+                        {
+                          "percent": 63,
+                          "name": "Manageable Debt Consolidation"
+                        },
+                        {
+                          "percent": 91,
+                          "name": "Reducing financial burdens"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faqs": {
+      "get": {
+        "tags": ["FAQ"],
+        "summary": "Отримати список FAQ",
+        "responses": {
+          "200": {
+            "description": "Список частих запитань",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FAQ"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["FAQ"],
+        "summary": "Додати нове FAQ",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FAQRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "FAQ успішно створено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FAQ"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некоректні дані"
+          }
+        }
+      }
+    },
+    "/faqs/{id}": {
+      "put": {
+        "tags": ["FAQ"],
+        "summary": "Редагувати FAQ",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID елементу FAQ"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FAQRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "FAQ оновлено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FAQ"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некоректний запит або відсутній ID"
+          },
+          "404": {
+            "description": "FAQ не знайдено"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["FAQ"],
+        "summary": "Видалити FAQ",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID елементу FAQ"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FAQ видалено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "faq": {
+                      "$ref": "#/components/schemas/FAQ"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "delete success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "FAQ не знайдено"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "UserSignupRequest": {
+        "type": "object",
+        "required": ["firstName", "secondName", "email", "password"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "example": "Ivan"
+          },
+          "secondName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "example": "Ivanov"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "strongPassword123"
+          }
+        }
+      },
+      "UserSigninRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "strongPassword123"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "64b7c7f9a19f4b2c5d8c1a9d"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Ivan"
+          },
+          "secondName": {
+            "type": "string",
+            "example": "Ivanov"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT токен",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "64b7c7f9a19f4b2c5d8c1a9d"
+          },
+          "review": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "example": "Чудовий сервіс!"
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20,
+            "example": "Petro"
+          }
+        }
+      },
+      "Picture": {
+        "type": "object",
+        "properties": {
+          "large": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://example.com/large.jpg"
+          },
+          "medium": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://example.com/medium.jpg"
+          },
+          "small": {
+            "type": "string",
+            "example": "https://example.com/small.jpg"
+          }
+        }
+      },
+      "Release": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "64b7c7f9a19f4b2c5d8c1a9d"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 200,
+            "example": "Новий альбом"
+          },
+          "location": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "example": "Київ"
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "example": "2025-05-30"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 1000,
+            "example": "Опис релізу альбому"
+          },
+          "picture": {
+            "$ref": "#/components/schemas/Picture"
+          }
+        }
+      },
+      "Quality": {
+        "type": "object",
+        "required": ["percent", "name"],
+        "properties": {
+          "percent": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 78
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "Secure Retirement Planning"
+          }
+        }
+      },
+      "Case": {
+        "type": "object",
+        "required": ["title", "description", "qualities"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100,
+            "example": "For Individuals"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 1000,
+            "example": "For individuals, our mortgage services pave the way to homeownership..."
+          },
+          "qualities": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Quality"
+            }
+          }
+        }
+      },
+      "FAQ": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "60c72b2f9f1b2c001c8e4b00"
+          },
+          "question": {
+            "type": "string",
+            "example": "Які умови кредитування?"
+          },
+          "answer": {
+            "type": "string",
+            "example": "Ми пропонуємо вигідні умови кредитування з фіксованою ставкою від 5%."
+          }
+        }
+      },
+      "FAQRequest": {
+        "type": "object",
+        "required": ["question", "answer"],
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 300,
+            "example": "Як відкрити рахунок?"
+          },
+          "answer": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 2000,
+            "example": "Щоб відкрити рахунок, заповніть заявку онлайн або зверніться у відділення банку."
+          }
+        }
+      }
+    }
+  }
+}
