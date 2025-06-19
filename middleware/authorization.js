@@ -2,6 +2,8 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import { HttpError } from "../helpers/index.js";
 import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const {JWT_SECRET} = process.env;
 
