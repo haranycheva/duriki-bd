@@ -3,16 +3,17 @@ import authControllers from "../controllers/auth-controllers.js";
 import { authorization, } from "../middleware/index.js";
 import { validateBody } from "../decorators/index.js";
 import {
+  signInValidationSchema,
   userValidationSchema,
 } from "../schema/user-schema.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", authControllers.signup);
+authRouter.post("/signup", validateBody(userValidationSchema), authControllers.signup);
 
 authRouter.post(
   "/signin",
-  validateBody(userValidationSchema),
+  validateBody(signInValidationSchema),
   authControllers.signin
 );
 

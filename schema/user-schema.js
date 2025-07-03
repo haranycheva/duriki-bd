@@ -8,7 +8,7 @@ export const userValidationSchema = Joi.object({
   email: Joi.string().pattern(emailReg).required(),
 });
 
-export const signUoValidationSchema = Joi.object({
+export const signInValidationSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().pattern(emailReg).required(),
 });
